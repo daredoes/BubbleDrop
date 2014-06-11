@@ -132,6 +132,8 @@
         <script>scripts\tween_exit_zoom_out.gml</script>
       </scripts>
     </scripts>
+    <script>scripts\scr_operator_symbol.gml</script>
+    <script>scripts\drawButton.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fnt_default</font>
@@ -152,8 +154,8 @@
     </objects>
   </objects>
   <rooms name="rooms">
-    <room>rooms\rm_init</room>
     <room>rooms\rm_main_menu</room>
+    <room>rooms\rm_init</room>
     <room>rooms\rm_main</room>
   </rooms>
   <constants number="11">

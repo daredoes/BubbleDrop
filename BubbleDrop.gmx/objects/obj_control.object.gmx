@@ -25,14 +25,21 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>time_left = 45
-time_left_max = 100
+            <string>time_left = 1000
+time_left_max = 1000
 
 operator = -1
 
 alarm[0] = 32
 
 draw_set_font(fnt_large)
+
+operator = -1
+operand = -1
+
+operand_operator = 0
+
+num = 50
 </string>
           </argument>
         </arguments>
@@ -55,12 +62,61 @@ draw_set_font(fnt_large)
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if random(10) &gt; 5
-instance_create( round(random(room_width - 128)/64)*64 + 64 , -128 , obj_number )
+            <string>if operand_operator
+instance_create( round(random(room_width - 256)/128)*128 + 128 , -128 , obj_number )
 else
-instance_create( round(random(room_width - 128)/64)*64 + 64 , -128 , obj_operator )
+instance_create( round(random(room_width - 256)/128)*128 + 128 , -128 , obj_operator )
 
 alarm[0] = 32
+
+operand_operator = !operand_operator
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="3" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>if operator &gt; -1
+if operand &gt; -1
+    {
+    switch operator
+        {
+        case 0:
+        num += operand
+        break;
+        case 1:
+        num -= operand
+        break;
+        case 2:
+        num *= operand
+        break;
+        case 3:
+        num /= operand
+        break;
+        }
+    operator = -1
+    operand = -1
+    num = round(num)
+    time_left = time_left_max
+    }
+    
+time_left -= 1
 </string>
           </argument>
         </arguments>
@@ -86,12 +142,42 @@ alarm[0] = 32
             <string>draw_set_halign(1)
 draw_set_valign(1)
 draw_set_color(0)
-draw_text(room_width/2,12,'TEXT')
+
+tstr = string(num)
+
+if operator &gt; -1    //SYMBOL
+    {
+    tstr+=" "+scr_operator_symbol(operator)
+    if operand = -1
+    tstr+=" ?"
+    }
+    
+if operand &gt; -1   ///NUMBER
+    {
+    if operator = -1
+    tstr+=" ? "
+    tstr+=" "+string(operand)
+    }
+draw_text(room_width/2,32,tstr)
 
 draw_set_color(c_dkgray)
 draw_rectangle(0,room_height - 24,room_width,room_height,0)
 draw_set_color(c_aqua)
-draw_rectangle(0,room_height - 24,time_left / 100 * room_width,room_height,0)
+draw_rectangle(0,room_height - 24,time_left / time_left_max * room_width,room_height,0)
+
+if num &gt; 100 || num &lt; 0 || time_left &lt;= 0
+    {
+    draw_set_color(c_black)
+    draw_rectangle(0,0,room_width,room_height,0)
+    draw_set_color(c_white)
+    draw_text(room_width/2,room_height/2,"YOU LOSE")
+    
+    if drawButton( view_xview[0]+view_wview[0]/2-112+112 , view_yview[0]+view_hview[0]-204+24 , 424 , 88,'RETRY')
+    {
+    game_restart()
+    }
+
+    }
 </string>
           </argument>
         </arguments>
