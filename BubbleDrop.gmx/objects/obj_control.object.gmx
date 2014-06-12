@@ -113,6 +113,8 @@ if operand &gt; -1
     operator = -1
     operand = -1
     num = round(num)
+    time_left += 100
+    if time_left &gt; time_left_max
     time_left = time_left_max
     }
     
@@ -161,9 +163,9 @@ if operand &gt; -1   ///NUMBER
 draw_text(room_width/2,32,tstr)
 
 draw_set_color(c_dkgray)
-draw_rectangle(0,room_height - 24,room_width,room_height,0)
+draw_rectangle(0,room_height - 64,room_width,room_height,0)
 draw_set_color(c_aqua)
-draw_rectangle(0,room_height - 24,time_left / time_left_max * room_width,room_height,0)
+draw_rectangle(0,room_height - 64,time_left / time_left_max * room_width,room_height,0)
 
 if num &gt; 100 || num &lt; 0 || time_left &lt;= 0
     {
