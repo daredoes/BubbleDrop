@@ -52,8 +52,11 @@ event_inherited();
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>instance_destroy()
+            <string>if obj_control.operator = -1
+{
+instance_destroy()
 obj_control.operator = operator
+}
 </string>
           </argument>
         </arguments>
