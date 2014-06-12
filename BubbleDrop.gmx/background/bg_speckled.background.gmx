@@ -13,7 +13,7 @@
     <TextureGroup0>0</TextureGroup0>
   </TextureGroups>
   <For3D>0</For3D>
-  <width>400</width>
+  <width>1920</width>
   <height>400</height>
   <data>images\bg_speckled.png</data>
 </background>

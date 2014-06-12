@@ -40,6 +40,8 @@ operand = -1
 operand_operator = 0
 
 num = 50
+
+
 </string>
           </argument>
         </arguments>
@@ -167,7 +169,7 @@ draw_rectangle(0,room_height - 64,room_width,room_height,0)
 draw_set_color(c_aqua)
 draw_rectangle(0,room_height - 64,time_left / time_left_max * room_width,room_height,0)
 
-if num &gt; 100 || num &lt; 0 || time_left &lt;= 0
+if num &gt;= 100 || num &lt;= 0 || time_left &lt;= 0
     {
     draw_set_color(c_black)
     draw_rectangle(0,0,room_width,room_height,0)

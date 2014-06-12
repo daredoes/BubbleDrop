@@ -25,7 +25,11 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>num = round(random(48))+1
+            <string>if random(10) &gt; 7
+num = round(random(48))+1
+else
+num = round(random(24))+1
+
 vspeed = 6
 event_inherited();
 /*
