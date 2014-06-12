@@ -54,6 +54,7 @@
     <background>background\bg_welcome</background>
     <background>background\back_speckle</background>
     <background>background\bg_rotate_background</background>
+    <background>background\bg_speckled</background>
   </backgrounds>
   <paths name="paths"/>
   <scripts name="scripts">
