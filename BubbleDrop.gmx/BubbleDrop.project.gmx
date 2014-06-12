@@ -52,6 +52,7 @@
   </sprites>
   <backgrounds name="background">
     <background>background\bg_welcome</background>
+    <background>background\back_speckle</background>
     <background>background\bg_rotate_background</background>
   </backgrounds>
   <paths name="paths"/>
