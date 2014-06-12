@@ -25,9 +25,9 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>time_left = 1000
-time_left_max = 1000
-
+            <string>
+time_left_max = 250
+time_left = time_left_max + 30
 operator = -1
 
 alarm[0] = 32
@@ -67,7 +67,7 @@ instance_create( round(random(room_width - 256)/128)*128 + 128 , -128 , obj_numb
 else
 instance_create( round(random(room_width - 256)/128)*128 + 128 , -128 , obj_operator )
 
-alarm[0] = 32
+alarm[0] = 24
 
 operand_operator = !operand_operator
 </string>
@@ -124,7 +124,7 @@ time_left -= 1
         </arguments>
       </action>
     </event>
-    <event eventtype="8" enumb="64">
+    <event eventtype="8" enumb="0">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -176,7 +176,7 @@ if num &gt; 100 || num &lt; 0 || time_left &lt;= 0
     
     if drawButton( view_xview[0]+view_wview[0]/2-112+112 , view_yview[0]+view_hview[0]-204+24 , 424 , 88,'RETRY')
     {
-    game_restart()
+    room_restart()
     }
 
     }

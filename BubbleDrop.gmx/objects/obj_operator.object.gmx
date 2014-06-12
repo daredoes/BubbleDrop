@@ -27,7 +27,7 @@
             <kind>1</kind>
             <string>operator = choose(0,1,2,3) //round(random(3))
 
-vspeed = 4
+vspeed = 6
 
 event_inherited();
 </string>
