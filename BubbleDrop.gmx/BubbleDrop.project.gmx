@@ -152,6 +152,7 @@
       </objects>
       <object>objects\shared_Tweener</object>
     </objects>
+    <object>objects\obj_ball</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_init</room>
