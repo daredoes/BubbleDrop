@@ -32,6 +32,8 @@ num = round(random(24))+1
 
 vspeed = 6
 event_inherited();
+
+image_speed = 0
 /*
 horizontal = 20;
 right = 1;
