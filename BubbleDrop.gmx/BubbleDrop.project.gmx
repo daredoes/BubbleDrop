@@ -48,12 +48,14 @@
       </sprites>
     </sprites>
     <sprite>sprites\spr_operator</sprite>
+    <sprite>sprites\spr_time_bar</sprite>
     <sprite>sprites\spr_number</sprite>
   </sprites>
   <backgrounds name="background">
     <background>background\bg_welcome</background>
     <background>background\back_speckle</background>
     <background>background\bg_rotate_background</background>
+    <background>background\back_arcade</background>
     <background>background\bg_speckled</background>
   </backgrounds>
   <paths name="paths"/>

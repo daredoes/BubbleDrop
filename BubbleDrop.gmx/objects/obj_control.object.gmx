@@ -30,7 +30,7 @@ time_left_max = 250
 time_left = time_left_max + 30
 operator = -1
 
-alarm[0] = 32
+
 
 draw_set_font(fnt_large)
 
@@ -41,7 +41,7 @@ operand_operator = 0
 
 num = 50
 
-
+game_started = 0
 </string>
           </argument>
         </arguments>
@@ -122,6 +122,8 @@ if operand &gt; -1
     }
     
 time_left -= 1
+
+
 </string>
           </argument>
         </arguments>
@@ -165,10 +167,15 @@ if operand &gt; -1   ///NUMBER
     }
 draw_text(room_width/2,32,tstr)
 
+/*
 draw_set_color(c_dkgray)
 draw_rectangle(0,room_height - 64,room_width,room_height,0)
 draw_set_color(c_aqua)
 draw_rectangle(0,room_height - 64,time_left / time_left_max * room_width,room_height,0)
+*/
+
+draw_sprite_stretched(spr_time_bar,1,0,room_height-48,room_width,48)
+draw_sprite_stretched(spr_time_bar,0,0,room_height-48,time_left / time_left_max * room_width,48)
 
 if num &gt;= 100 || num &lt;= 0 || time_left &lt;= 0
     {
@@ -181,8 +188,16 @@ if num &gt;= 100 || num &lt;= 0 || time_left &lt;= 0
         {
         room_restart()
         }
-
     }
+    
+if game_started = 0
+{
+draw_set_halign(fa_center)
+draw_set_valign(fa_center)
+draw_text(room_width/2,room_height/2,"Tap to Start")
+alarm[0] = 32
+game_started = 1
+}
 </string>
           </argument>
         </arguments>
