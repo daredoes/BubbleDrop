@@ -114,6 +114,7 @@ if operand &gt; -1
         }
     operator = -1
     operand = -1
+    score += num;
     num = round(num)
     time_left += 100
     if time_left &gt; time_left_max
