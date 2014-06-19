@@ -30,8 +30,6 @@ time_left_max = 250
 time_left = time_left_max + 30
 operator = -1
 
-
-
 draw_set_font(fnt_large)
 
 operator = -1
@@ -46,7 +44,9 @@ game_started = 0
 flash_a = 0
 flash_a_dir = .1
 
+lose = 0
 
+global.tries_remaining -= 1
 </string>
           </argument>
         </arguments>
@@ -117,9 +117,10 @@ if operand &gt; -1
         num /= operand
         break;
         }
+        
+    score += operand;
     operator = -1
     operand = -1
-    score += num;
     num = round(num)
     time_left += 100
     if time_left &gt; time_left_max
@@ -157,9 +158,16 @@ flash_a += flash_a_dir
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>draw_set_halign(1)
+            <string>draw_set_halign(fa_left)
+draw_set_valign(fa_top)
+
+draw_text(8,8,score)
+
+
+draw_set_halign(1)
 draw_set_valign(1)
 draw_set_color(0)
+
 
 tstr = string(num)
 
@@ -192,14 +200,32 @@ draw_rectangle(0,room_height - 64,time_left / time_left_max * room_width,room_he
 draw_sprite_stretched(spr_time_bar,1,0,room_height-48,room_width,48)
 draw_sprite_stretched(spr_time_bar,0,0,room_height-48,time_left / time_left_max * room_width,48)
 
+if lose = 0
 if num &gt;= 100 || num &lt;= 0 || time_left &lt;= 0
+    {
+    lose = 1
+    with obj_number
+    instance_destroy()
+    with obj_operator
+    instance_destroy()
+    alarm[0] = -1
+    if score &gt; global.high_score
+    global.high_score = score
+    }
+if lose
     {
     draw_set_color(c_black)
     draw_rectangle(0,0,room_width,room_height,0)
     draw_set_color(c_white)
-    draw_text(room_width/2,room_height/2,"YOU LOSE")
+    //(Sum of all number bubbles popped)
+    draw_text(room_width/2,room_height/2,
+        "GAME OVER## SCORE: "
+        +string(score)
+        +"##BEST SCORE: "+string(global.high_score)
+        +"##Tries Remaining: "
+        +string(global.tries_remaining))
     
-    if drawButton( view_xview[0]+view_wview[0]/2-112+112 , view_yview[0]+view_hview[0]-204+24 , 424 , 88,'RETRY')
+    if drawButton( view_xview[0]+view_wview[0]/2-112+112 , view_yview[0]+view_hview[0]-204+24 , 424 , 88,'TRY AGAIN')
         {
         room_restart()
         }
