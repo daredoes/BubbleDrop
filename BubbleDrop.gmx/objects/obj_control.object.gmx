@@ -121,6 +121,7 @@ if operand &gt; -1
     time_left = time_left_max
     }
     
+if game_started
 time_left -= 1
 
 
@@ -195,8 +196,11 @@ if game_started = 0
 draw_set_halign(fa_center)
 draw_set_valign(fa_center)
 draw_text(room_width/2,room_height/2,"Tap to Start")
+if mouse_check_button_pressed(1)
+{
 alarm[0] = 32
 game_started = 1
+}
 }
 </string>
           </argument>
