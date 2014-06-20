@@ -52,6 +52,7 @@
     <sprite>sprites\spr_number</sprite>
     <sprite>sprites\spr_text_glow</sprite>
     <sprite>sprites\spr_score_board</sprite>
+    <sprite>sprites\spr_button</sprite>
   </sprites>
   <backgrounds name="background">
     <background>background\bg_welcome</background>

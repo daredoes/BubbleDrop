@@ -227,6 +227,7 @@ if lose
     
     if drawButton( view_xview[0]+view_wview[0]/2-112+112 , view_yview[0]+view_hview[0]-204+24 , 424 , 88,'TRY AGAIN')
         {
+        score = 0
         room_restart()
         }
     }
