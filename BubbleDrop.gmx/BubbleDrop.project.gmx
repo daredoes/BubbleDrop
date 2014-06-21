@@ -52,6 +52,7 @@
     <sprite>sprites\spr_number</sprite>
     <sprite>sprites\spr_text_glow</sprite>
     <sprite>sprites\spr_score_board</sprite>
+    <sprite>sprites\spr_arrow</sprite>
     <sprite>sprites\spr_button</sprite>
   </sprites>
   <backgrounds name="background">
@@ -145,6 +146,7 @@
   <fonts name="fonts">
     <font>fonts\fnt_default</font>
     <font>fonts\fnt_large</font>
+    <font>fonts\fnt_tutorial</font>
   </fonts>
   <objects name="objects">
     <object>objects\obj_number</object>
