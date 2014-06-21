@@ -27,8 +27,6 @@
             <kind>1</kind>
             <string>operator = choose(0,1,2,3) //round(random(3))
 
-vspeed = 6
-
 event_inherited();
 
 image_speed = 0
@@ -54,7 +52,8 @@ image_speed = 0
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if obj_control.operator = -1
+            <string>if obj_control.game_started
+if obj_control.operator = -1
 {
 instance_destroy()
 obj_control.operator = operator

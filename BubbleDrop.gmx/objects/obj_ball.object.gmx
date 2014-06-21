@@ -28,6 +28,10 @@
             <string>horizontal = 20;
 right = 1;
 startX = x;
+
+
+vspeed = 6
+
 </string>
           </argument>
         </arguments>
@@ -75,6 +79,9 @@ if(x &gt;= room_width)
 {
     right *= -1;
 }
+
+if y &gt; room_height + 128
+instance_destroy()
 </string>
           </argument>
         </arguments>

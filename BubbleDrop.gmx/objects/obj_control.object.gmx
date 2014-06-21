@@ -63,6 +63,12 @@ tutorial_step = 5
 disp_len = 0
 
 str = " "
+
+alarm[0] = 50
+
+tutorial_open = 0
+
+
 </string>
           </argument>
         </arguments>
@@ -86,13 +92,15 @@ str = " "
           <argument>
             <kind>1</kind>
             <string>if tutorial_step &lt; 3 || global.tries_remaining &gt; 18
-alarm[1] = 100
+alarm[1] = 150
 tutorial_step++
 
 if global.tries_remaining &gt; 18
 if tutorial_step = 4
+{
+tutorial_open = 0
 tutorial_step = 0
-
+}
 disp_len = 0
 </string>
           </argument>
@@ -121,7 +129,7 @@ instance_create( round(random(room_width - 256)/128)*128 + 128 , -128 , obj_numb
 else
 instance_create( round(random(room_width - 256)/128)*128 + 128 , -128 , obj_operator )
 
-alarm[0] = 24
+alarm[0] = 18 //24
 
 operand_operator = !operand_operator
 </string>
@@ -205,10 +213,15 @@ flash_a += flash_a_dir
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>draw_set_halign(fa_left)
-draw_set_valign(fa_top)
+            <string>
+    
+if game_started || tutorial_open
+{
 
-draw_text(8,8,score)
+draw_set_halign(fa_left)
+draw_set_valign(fa_top)
+draw_set_color(c_aqua)
+draw_text(16,32 + 16,"Score: "+string(score))
 
 draw_set_halign(1)
 draw_set_valign(1)
@@ -229,21 +242,33 @@ if operand &gt; -1   ///NUMBER
     tstr+=" ? "
     tstr+=" "+string(operand)
     }
-    
+
+
 draw_sprite_stretched(spr_time_bar,1,0,0,room_width,48)
 draw_sprite_stretched(spr_time_bar,0,0,0,time_left / time_left_max * room_width,48)
 
-if tutorial_step = 1 //&amp;&amp; !game_started
-{
-draw_sprite_stretched(spr_time_bar,1,0,0,room_width,48)
-draw_sprite_stretched(spr_time_bar,0,0,0,((string_length(str) - disp_len) / string_length(str)) * room_width,48)
-}    
+
+if !game_started
+    {
+    if tutorial_step = 1
+        {
+        draw_sprite_stretched(spr_time_bar,1,0,0,room_width,48)
+        draw_sprite_stretched(spr_time_bar,0,0,0,((string_length(str) - disp_len) / string_length(str)) * room_width,48)
+        }   
+    if tutorial_step = 3
+        {
+        w = ((string_length(str) - disp_len) / string_length(str)) * room_width
+        if disp_len &gt; string_length(str) * 2 / 3
+        w = ((string_length(str) - disp_len ) / string_length(str)) * room_width + 800
+        draw_sprite_stretched(spr_time_bar,1,0,0,room_width,48)
+        draw_sprite_stretched(spr_time_bar,0,0,0,w,48)
+        }    
+    }
 
 draw_sprite(spr_score_board,0,room_width/2,32+48)
 draw_sprite_stretched(spr_text_glow,0,room_width/2-string_width(tstr),16+48,string_width(tstr)*2,32)
-
-
-if tutorial_step = 2
+if tutorial_open
+if tutorial_step = 2 || tutorial_step = 3
     {
     if disp_len &lt; string_length(str) / 3
     tstr = "50"
@@ -257,8 +282,11 @@ if tutorial_step = 2
     tstr = "57"
     }
 
+
 draw_set_color(c_aqua)
 draw_text(room_width/2,32+48,tstr)
+}
+
 
 /*
 draw_set_color(c_dkgray)
@@ -293,26 +321,39 @@ if lose
         +"##Tries Remaining: "
         +string(global.tries_remaining))
     
-    if show_restart &gt;= 100
+    if show_restart &gt;= 50
     {
     draw_set_halign(fa_center)
     draw_set_valign(fa_center)
-    draw_set_alpha(flash_a)
-    draw_text(room_width / 2, room_height - 128, "Tap to Try Again")
-    draw_set_alpha(1)
-    //if drawButton( view_xview[0]+view_wview[0]/2-112+112 , view_yview[0]+view_hview[0]-204+24 , 424 , 88,'TRY AGAIN')
-    if mouse_check_button_pressed(1)
+    //draw_set_alpha(flash_a)
+    //draw_text(room_width / 2, room_height - 128, "Tap to Try Again")
+    if button(spr_button,room_width/2-192,room_height - 170,384,135,"Restart",-1,0,"")
         {
         score = 0
         room_restart()
         }
+    draw_set_alpha(1)
+    //if drawButton( view_xview[0]+view_wview[0]/2-112+112 , view_yview[0]+view_hview[0]-204+24 , 424 , 88,'TRY AGAIN')
+    /*if mouse_check_button_pressed(1)
+        {
+        score = 0
+        room_restart()
+        }*/
     }
     else
     show_restart++
     }
     
+if tutorial_open
+{
 if game_started = 0
     {
+    if button(spr_button,16,room_height - 128,256,90,"Back",-1,0,"")
+        {
+        tutorial_open = 0
+        alarm[0] = 1
+        }
+    
     draw_set_halign(fa_center)
     draw_set_valign(fa_center)
     
@@ -320,7 +361,7 @@ if game_started = 0
     
     if tutorial_step = 0
     {
-    str = "Keep the Number between 0 and 100."
+    str = "Keep the number between 0 and 100."
     draw_sprite(spr_arrow,0,room_width/2,128-flash_a*10+48)
     }
     
@@ -335,17 +376,21 @@ if game_started = 0
     {
     //draw_sprite(spr_arrow,1,room_width/2,room_height-128+flash_a*10)
     
-    draw_sprite(spr_number,0,room_width/2,disp_len*room_height/string_length(str))
+    
+    //draw_sprite(spr_number,0,room_width/2,room_height/2) //disp_len*room_height/(string_length(str)+1)
         
-    str = "Completing an equation will change the number."
+    str = "Completing an equation will change the number and give you points."
     if disp_len &gt; string_length(str) * 2/3
-    draw_sprite(spr_arrow,0,room_width/2,128-flash_a*10+48)
+        {
+        draw_sprite(spr_arrow,0,room_width/2,128-flash_a*10+48)
+        draw_sprite_ext(spr_arrow,1,room_width/2,128-flash_a*10+48,1,1,0,c_white,flash_a)
+        }
     }
     
     if tutorial_step = 3
     {
     draw_sprite(spr_arrow,0,room_width/4,64+flash_a*10)
-    str = "Completing an equation without going out of bounds will increase your time."
+    str = "Each time you complete an equation your time will be increased." // without going out of bounds
     }
     //increase your time#and
     
@@ -362,19 +407,49 @@ if game_started = 0
     if disp_len &lt; string_length(str)
     disp_len++
     
-    draw_set_alpha(flash_a)
-
-    draw_set_alpha(flash_a)
-    
+    draw_set_alpha(1)
+    /*
     draw_text(room_width/2,room_height/2+32,"&lt; Tap to Start &gt;")
     
-    draw_set_alpha(1)
+    
     if mouse_check_button_pressed(1)
         {
         alarm[0] = 32
         game_started = 1
         }
+    */
     }
+}
+else
+    {
+    if !game_started
+        {
+        if button(spr_button,room_width/2-192,room_height/2-135,384,135,"Play",-1,0,"")
+            {
+            game_started = 1
+            with obj_ball
+            instance_destroy()
+            alarm[0] = 30
+            }
+        if button(spr_button,room_width/2-192,room_height/2+20,384,135,"High Scores",-1,0,"")
+            {
+            
+            }
+        if button(spr_button,room_width/2-192,room_height/2+40+135,384,135,"Tutorial",-1,0,"")
+            {
+            tutorial_open = 1
+            alarm[1] = 100
+            tutorial_step = 0
+            alarm[0] = -1
+            with obj_ball
+            instance_destroy()
+            }
+        }
+    }
+
+    
+    
+
 </string>
           </argument>
         </arguments>

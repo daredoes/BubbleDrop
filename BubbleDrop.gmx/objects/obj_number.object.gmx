@@ -30,7 +30,7 @@ num = round(random(48))+1
 else
 num = round(random(24))+1
 
-vspeed = 6
+
 event_inherited();
 
 image_speed = 0
@@ -60,7 +60,8 @@ startX = x;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if obj_control.operand = -1
+            <string>if obj_control.game_started
+if obj_control.operand = -1
 {
 instance_destroy()
 obj_control.operand = num

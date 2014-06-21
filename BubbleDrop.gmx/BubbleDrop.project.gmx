@@ -142,6 +142,7 @@
     </scripts>
     <script>scripts\scr_operator_symbol.gml</script>
     <script>scripts\drawButton.gml</script>
+    <script>scripts\button.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fnt_default</font>
