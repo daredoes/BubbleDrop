@@ -47,18 +47,18 @@ flash_a_dir = .1
 
 lose = 0
 
-global.tries_remaining -= 1
+/*global.tries_remaining -= 1
 
 if global.tries_remaining &gt; 18
 {
-alarm[1] = 100
+//alarm[1] = 100
 tutorial_step = 0
 }
 else
 {
 tutorial_step = 5
-}
-
+}*/
+tutorial_step = 0
 
 disp_len = 0
 
@@ -92,7 +92,7 @@ highscores_open = 0
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if global.tutorial_open
+            <string>if tutorial_open
 {
 if tutorial_step &lt; 3 || global.tries_remaining &gt; 18
 alarm[1] = 150
@@ -330,9 +330,9 @@ if lose
     draw_text(room_width/2,room_height/2,
         "Game Over## Score: "
         +string(score)
-        +"##Best Score: "+string(global.high_score)
-        +"##Tries Remaining: "
-        +string(global.tries_remaining))
+        +"##Top Score: "+string(global.high_score))
+        //+"##Tries Remaining: "
+        //+string(global.tries_remaining))
     
     if show_restart &gt;= 50
     {
@@ -340,11 +340,20 @@ if lose
     draw_set_valign(fa_center)
     //draw_set_alpha(flash_a)
     //draw_text(room_width / 2, room_height - 128, "Tap to Try Again")
-    if button(spr_button,room_width/2-192,room_height - 170,384,135,"Restart",-1,0,"")
+    if button(spr_button,room_width/2 - 192,room_height - 170,384,135,"Back",-1,0,"")
         {
-        score = 0
         room_restart()
         }
+    /*
+    if button(spr_button,room_width/2-192 - 384 / 2 - 32,room_height - 170,384,135,"Main Menu",-1,0,"")
+        {
+        lose = 0
+        game_started = 0
+        show_restart = 0
+        score = 0
+        //room_restart()
+        }
+    */
     draw_set_alpha(1)
     //if drawButton( view_xview[0]+view_wview[0]/2-112+112 , view_yview[0]+view_hview[0]-204+24 , 424 , 88,'TRY AGAIN')
     /*if mouse_check_button_pressed(1)
@@ -365,6 +374,10 @@ if game_started = 0
         {
         tutorial_open = 0
         alarm[0] = 1
+        }
+    if button(spr_button,room_width-16-256,room_height - 128,256,90,"Replay",-1,0,"")
+        {
+        disp_len = 0
         }
     if tutorial_step &lt; 4
     {
@@ -397,6 +410,35 @@ if game_started = 0
     
     draw_text(room_width / 2 , room_height - 96 , string(tutorial_step + 1) + " / 5")
     
+    if tutorial_step = 2
+        {
+        x2 = room_width / 2 - 128
+        y2 = room_height / 2 + 32
+        x1 = room_width / 2 + 128
+        y1 = room_height / 2 - 32
+        
+        if disp_len = round(string_length(str) / 3)
+        effect_create_above(ef_ring,x2,y2,2,c_white)
+        
+        //if disp_len &lt; string_length(str) / 2
+        {
+        draw_sprite(spr_number,0,x1,y1) //disp_len*room_height/(string_length(str)+1)
+        
+        draw_set_color(c_black)
+        draw_set_halign(fa_center)
+        draw_set_valign(fa_center)
+        draw_text(x1,y1,7)
+        }
+        
+        if disp_len = round(string_length(str) / 2)
+        effect_create_above(ef_ring,x1,y1,2,c_white)
+        
+        //if disp_len &lt; string_length(str) / 3
+        {
+        draw_sprite(spr_operator,1,x2,y2)
+        }
+        }
+    
     str = ""
     
     if tutorial_step = 0
@@ -415,10 +457,6 @@ if game_started = 0
     if tutorial_step = 2
     {
     //draw_sprite(spr_arrow,1,room_width/2,room_height-128+flash_a*10)
-    
-    
-    //draw_sprite(spr_number,0,room_width/2,room_height/2) //disp_len*room_height/(string_length(str)+1)
-        
     str = "Completing an equation will change the number and give you points."
     //if disp_len &gt; string_length(str) * 2/3
     //    {
@@ -441,6 +479,7 @@ if game_started = 0
     }
     
     draw_set_font(fnt_tutorial)
+    draw_set_color(c_aqua)
     draw_text(room_width/2,room_height - 256,string_copy(str,1,disp_len))
     draw_set_font(fnt_large)
     
@@ -466,6 +505,10 @@ else
         {
         if highscores_open
             {
+            //draw_set_color(c_black)
+            //draw_text(room_width/2,room_height/2,"High Score#"+string(global.high_score))
+            draw_text_outlined(room_width/2,room_height/2,"Top Score: "+string(global.high_score),c_black,c_aqua)
+            
             if button(spr_button,16,room_height - 128,256,90,"Back",-1,0,"")
                 {
                 highscores_open = 0
@@ -473,6 +516,7 @@ else
             }
         else
             {
+            draw_sprite(spr_orcana_title,0,room_width / 2 , room_height / 2 - 256)
             if button(spr_button,room_width/2-192,room_height/2-135,384,135,"Play",-1,0,"")
                 {
                 game_started = 1
@@ -480,14 +524,14 @@ else
                 instance_destroy()
                 alarm[0] = 30
                 }
-            if button(spr_button,room_width/2-192,room_height/2+20,384,135,"High Scores",-1,0,"")
+            if button(spr_button,room_width/2-192,room_height/2+20,384,135,"Top Score",-1,0,"")
                 {
                 highscores_open = 1
                 }
             if button(spr_button,room_width/2-192,room_height/2+40+135,384,135,"Tutorial",-1,0,"")
                 {
                 tutorial_open = 1
-                alarm[1] = 100
+                //alarm[1] = 100
                 tutorial_step = 0
                 alarm[0] = -1
                 with obj_ball

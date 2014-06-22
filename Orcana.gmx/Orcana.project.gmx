@@ -48,6 +48,7 @@
       </sprites>
     </sprites>
     <sprite>sprites\spr_operator</sprite>
+    <sprite>sprites\spr_orcana_title</sprite>
     <sprite>sprites\spr_time_bar</sprite>
     <sprite>sprites\spr_number</sprite>
     <sprite>sprites\spr_text_glow</sprite>
@@ -142,6 +143,7 @@
       </scripts>
     </scripts>
     <script>scripts\scr_operator_symbol.gml</script>
+    <script>scripts\draw_text_outlined.gml</script>
     <script>scripts\drawButton.gml</script>
     <script>scripts\button.gml</script>
   </scripts>
