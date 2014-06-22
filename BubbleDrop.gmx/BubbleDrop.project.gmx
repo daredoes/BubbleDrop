@@ -54,6 +54,7 @@
     <sprite>sprites\spr_score_board</sprite>
     <sprite>sprites\spr_arrow</sprite>
     <sprite>sprites\spr_button</sprite>
+    <sprite>sprites\spr_button_dull</sprite>
   </sprites>
   <backgrounds name="background">
     <background>background\bg_welcome</background>

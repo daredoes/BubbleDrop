@@ -25,7 +25,7 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if random(10) &gt; 7
+            <string>if random(10) &gt; 8
 num = round(random(48))+1
 else
 num = round(random(24))+1

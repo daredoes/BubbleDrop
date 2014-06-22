@@ -68,6 +68,7 @@ alarm[0] = 50
 
 tutorial_open = 0
 
+highscores_open = 0
 
 </string>
           </argument>
@@ -91,7 +92,9 @@ tutorial_open = 0
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if tutorial_step &lt; 3 || global.tries_remaining &gt; 18
+            <string>if global.tutorial_open
+{
+if tutorial_step &lt; 3 || global.tries_remaining &gt; 18
 alarm[1] = 150
 tutorial_step++
 
@@ -100,8 +103,10 @@ if tutorial_step = 4
 {
 tutorial_open = 0
 tutorial_step = 0
+alarm[0] = 1
 }
 disp_len = 0
+}
 </string>
           </argument>
         </arguments>
@@ -124,12 +129,17 @@ disp_len = 0
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if operand_operator
-instance_create( round(random(room_width - 256)/128)*128 + 128 , -128 , obj_number )
-else
-instance_create( round(random(room_width - 256)/128)*128 + 128 , -128 , obj_operator )
+            <string>x1 = round(random(room_width - 256)/128)*128 + 128
 
-alarm[0] = 18 //24
+if collision_circle(x1,-128,32,obj_ball,1,1)
+x1 = round(random(room_width - 256)/128)*128 + 128
+
+if operand_operator
+instance_create( x1 , -128 , obj_number )
+else
+instance_create( x1 , -128 , obj_operator )
+
+alarm[0] = 20 //24
 
 operand_operator = !operand_operator
 </string>
@@ -221,6 +231,9 @@ if game_started || tutorial_open
 draw_set_halign(fa_left)
 draw_set_valign(fa_top)
 draw_set_color(c_aqua)
+if tutorial_open &amp;&amp; tutorial_step = 2 &amp;&amp; disp_len &gt; string_length(str) -1
+draw_text(16,32 + 16,"Score: "+string(7))
+else
 draw_text(16,32 + 16,"Score: "+string(score))
 
 draw_set_halign(1)
@@ -258,7 +271,7 @@ if !game_started
     if tutorial_step = 3
         {
         w = ((string_length(str) - disp_len) / string_length(str)) * room_width
-        if disp_len &gt; string_length(str) * 2 / 3
+        if disp_len &gt; string_length(str) - 1
         w = ((string_length(str) - disp_len ) / string_length(str)) * room_width + 800
         draw_sprite_stretched(spr_time_bar,1,0,0,room_width,48)
         draw_sprite_stretched(spr_time_bar,0,0,0,w,48)
@@ -295,7 +308,7 @@ draw_set_color(c_aqua)
 draw_rectangle(0,room_height - 64,time_left / time_left_max * room_width,room_height,0)
 */
 
-
+if game_started
 if lose = 0
 if num &gt;= 100 || num &lt;= 0 || time_left &lt;= 0
     {
@@ -353,9 +366,36 @@ if game_started = 0
         tutorial_open = 0
         alarm[0] = 1
         }
+    if tutorial_step &lt; 4
+    {
+    if button(spr_button,room_width / 2 + 128,room_height - 128,256,90,"Next",-1,0,"")
+        {
+        tutorial_step++
+        disp_len = 0
+        //tutorial_open = 0
+        //alarm[0] = 1
+        }
+    }
+    else
+    button(spr_button_dull,room_width / 2 + 128,room_height - 128,256,90,"Next",-1,0,"")
+    
+    if tutorial_step &gt; 0
+    {
+    if button(spr_button,room_width / 2 -256-128,room_height - 128,256,90,"Prev",-1,0,"")
+        {
+        tutorial_step--
+        disp_len = 0
+        //tutorial_open = 0
+        //alarm[0] = 1
+        }
+    }
+    else
+    button(spr_button_dull,room_width / 2 -256-128,room_height - 128,256,90,"Prev",-1,0,"")
     
     draw_set_halign(fa_center)
     draw_set_valign(fa_center)
+    
+    draw_text(room_width / 2 , room_height - 96 , string(tutorial_step + 1) + " / 5")
     
     str = ""
     
@@ -380,11 +420,11 @@ if game_started = 0
     //draw_sprite(spr_number,0,room_width/2,room_height/2) //disp_len*room_height/(string_length(str)+1)
         
     str = "Completing an equation will change the number and give you points."
-    if disp_len &gt; string_length(str) * 2/3
-        {
+    //if disp_len &gt; string_length(str) * 2/3
+    //    {
         draw_sprite(spr_arrow,0,room_width/2,128-flash_a*10+48)
-        draw_sprite_ext(spr_arrow,1,room_width/2,128-flash_a*10+48,1,1,0,c_white,flash_a)
-        }
+        //draw_sprite_ext(spr_arrow,1,room_width/2,128-flash_a*10+48,1,1,0,c_white,flash_a)
+    //    }
     }
     
     if tutorial_step = 3
@@ -396,8 +436,8 @@ if game_started = 0
     
     if tutorial_step = 4
     {
-    str = "Tapping higher numbers gives more points."
-    draw_sprite(spr_arrow,2,128-flash_a*10,128-flash_a*10)
+    str = "The number of points you get is equal to the number on the bubble you tap." //Tapping higher numbers gives more points.
+    //draw_sprite(spr_arrow,2,128-flash_a*10,128-flash_a*10)
     }
     
     draw_set_font(fnt_tutorial)
@@ -424,27 +464,38 @@ else
     {
     if !game_started
         {
-        if button(spr_button,room_width/2-192,room_height/2-135,384,135,"Play",-1,0,"")
+        if highscores_open
             {
-            game_started = 1
-            with obj_ball
-            instance_destroy()
-            alarm[0] = 30
+            if button(spr_button,16,room_height - 128,256,90,"Back",-1,0,"")
+                {
+                highscores_open = 0
+                }
             }
-        if button(spr_button,room_width/2-192,room_height/2+20,384,135,"High Scores",-1,0,"")
+        else
             {
-            
-            }
-        if button(spr_button,room_width/2-192,room_height/2+40+135,384,135,"Tutorial",-1,0,"")
-            {
-            tutorial_open = 1
-            alarm[1] = 100
-            tutorial_step = 0
-            alarm[0] = -1
-            with obj_ball
-            instance_destroy()
+            if button(spr_button,room_width/2-192,room_height/2-135,384,135,"Play",-1,0,"")
+                {
+                game_started = 1
+                with obj_ball
+                instance_destroy()
+                alarm[0] = 30
+                }
+            if button(spr_button,room_width/2-192,room_height/2+20,384,135,"High Scores",-1,0,"")
+                {
+                highscores_open = 1
+                }
+            if button(spr_button,room_width/2-192,room_height/2+40+135,384,135,"Tutorial",-1,0,"")
+                {
+                tutorial_open = 1
+                alarm[1] = 100
+                tutorial_step = 0
+                alarm[0] = -1
+                with obj_ball
+                instance_destroy()
+                }
             }
         }
+        
     }
 
     
